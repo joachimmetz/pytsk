@@ -20,10 +20,7 @@ jobs:
       run: |
         python setup.py update
         python setup.py build
-    - name: Set PYTHONPATH
-      run: |
-        $Glob = dir build\lib.win*-*
-        echo "PYTHONPATH=build\${Glob.Name}" >> $GITHUB_ENV
+        python setup.py install
     - name: Test Python module 
       run: |
         python run_tests.py
