@@ -25,4 +25,5 @@ jobs:
         dir build\lib.win*-*
         $Glob = dir build\lib.win*-*
         $env:PYTHONPATH = $Glob.Name
+        Write-Host $env:PYTHONPATH
         python run_tests.py
