@@ -22,8 +22,6 @@ jobs:
         python setup.py build
     - name: Test Python module 
       run: |
-        dir build\lib.win*-*
         $Glob = dir build\lib.win*-*
-        $env:PYTHONPATH = $Glob.Name
-        Write-Host $env:PYTHONPATH
+        $env:PYTHONPATH = build\$Glob.Name
         python run_tests.py
