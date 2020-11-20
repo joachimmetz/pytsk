@@ -21,6 +21,7 @@ jobs:
         python setup.py update
         python setup.py build
     - name: Test Python module 
+      env:
+        PYTHONPATH: build\lib.win*-*
       run: |
-        set PYTHONPATH=build\lib.win*-*
         python run_tests.py
