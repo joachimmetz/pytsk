@@ -9,6 +9,7 @@ jobs:
       matrix:
         os: [windows-latest]
         python-version: [3.8]
+        architecture: ['x86', 'x64']
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -19,7 +20,7 @@ jobs:
       run: |
         python setup.py update
         python setup.py build
-    - name: Test Python module
+    - name: Test Python module 
       run: |
-        set PYTHONPATH=build\\lib.win32-${{ matrix.python-version }}
+        set PYTHONPATH=build\lib.win*-*
         python run_tests.py
