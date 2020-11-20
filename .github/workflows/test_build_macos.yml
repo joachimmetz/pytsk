@@ -22,6 +22,7 @@ jobs:
       run: |
         python setup.py update
         python setup.py build
+        python setup.py install
     - name: Test Python module
       run: |
         python run_tests.py
