@@ -23,5 +23,5 @@ jobs:
     - name: Test Python module 
       run: |
         $Glob = dir build\lib.win*-*
-        set PYTHONPATH "build\${Glob.Name}"
+        echo "::set-env name=PYTHONPATH::build\${Glob.Name}"
         python run_tests.py
