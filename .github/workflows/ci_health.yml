@@ -1,0 +1,56 @@
+# Check GitHub actions (CI) health.
+name: ci_health
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+on:
+  pull_request:
+  push:
+permissions:
+  contents: read
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+    - uses: reviewdog/action-actionlint@619a81ec64ff8c0211cd6146eb2b21e8f1d7f440 # v1.81.1
+      with:
+        fail_level: warning
+  ci-doctor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+    - name: Set up Node.js
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-cache: "npm"
+    - name: Run ci-doctor
+      run: npx ci-doctor > report.md
+      continue-on-error: true
+    - name: Generate ci-doctor report
+      run: |
+        echo "### 🩺 ci-doctor report" >> "${GITHUB_STEP_SUMMARY}"
+        if [[ -f report.md ]]; then
+          cat report.md >> "${GITHUB_STEP_SUMMARY}"
+        else
+          echo "✅ No minor configuration defects found" >> "${GITHUB_STEP_SUMMARY}"
+        fi
+  zizmor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+    - name: Install zizmor
+      run: |
+        cargo install zizmor --locked
+    - name: Run zizmor
+      run: |
+        zizmor --format=github .github/
