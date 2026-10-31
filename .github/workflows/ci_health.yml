@@ -31,9 +31,10 @@ jobs:
       with:
         node-cache: "npm"
     - name: Run ci-doctor
-      run: npx ci-doctor > report.md
-      continue-on-error: true
+      run: |
+        npx ci-doctor > report.md
     - name: Generate ci-doctor report
+      if: always()
       run: |
         echo "### 🩺 ci-doctor report" >> "${GITHUB_STEP_SUMMARY}"
         if [[ -f report.md ]]; then
